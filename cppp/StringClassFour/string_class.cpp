@@ -51,6 +51,7 @@ MyString::MyString(char *str)
 MyString::MyString(const MyString &str)
 {
     string_length = str.string_length;
+    string_content = new char[string_length];
     for (int i = 0; i != string_length; i++)
     {
         string_content[i] = str.string_content[i];
@@ -63,8 +64,8 @@ MyString::~MyString()
 int main()
 {
     MyString str1("hellow world!");
-    MyString str2("hey!!");
+    MyString str2(str1);
 
-    str1.print();
+    str1.println();
     str2.println();
 }
