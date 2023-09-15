@@ -17,15 +17,35 @@ public:
     MyString &insert(int loc, const MyString &str);
     MyString &insert(int loc, const char *str);
     MyString &insert(int loc, const char c);
-
+    char at(int i) const;
     MyString &assign(const MyString &str);
-    MyString &asssign(const char *str);
+    MyString &assign(const char *str);
 
     MyString(char c);
     MyString(char *str);
     MyString(const MyString &str);
 };
-
+char MyString::at(int i) const
+{
+    if (i >= string_length || i < 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return string_content[i];
+    }
+}
+MyString &MyString::insert(int loc, const char *str)
+{
+    MyString temp(str);
+    return insert(loc, temp);
+}
+MyString &MyString::insert(int loc, const char c)
+{
+    MyString temp(c);
+    return insert(loc, temp);
+}
 MyString &MyString::insert(int loc, const MyString &str)
 {
     if (loc < 0 || loc > string_length)
@@ -44,7 +64,7 @@ MyString &MyString::insert(int loc, const MyString &str)
         {
             string_content[i] = prev_string_content[i];
         }
-        for (int j = loc; j < loc + str.length; i++)
+        for (int j = loc; j < loc + str.string_length; i++)
         {
             string_content[j] = str.string_content[j];
         }
@@ -52,7 +72,7 @@ MyString &MyString::insert(int loc, const MyString &str)
         {
             string_content[str.string_length + i] = prev_string_content[i];
         }
-        delete[] prev_string_conent;
+        delete[] prev_string_content;
         return *this;
     }
     delete[] string_content;
@@ -91,7 +111,7 @@ MyString &MyString::assign(const MyString &str)
         memory_capacity = str.string_length;
     }
 
-    for (int i = 0; i != string_lengt; i++)
+    for (int i = 0; i != string_length; i++)
     {
 
         string_content[i] = str.string_content[i];
