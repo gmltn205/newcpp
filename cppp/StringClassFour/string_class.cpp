@@ -14,6 +14,12 @@ public:
     void reserve(int size);
     int capacity();
     ~MyString();
+    int compare(const MyString &str) const;
+
+    MyString &erase(int loc, int num);
+    int find(int find_from, MyString &str) const;
+    int find(int find_from, char *str) const;
+    int find(int find_from, char c) const;
     MyString &insert(int loc, const MyString &str);
     MyString &insert(int loc, const char *str);
     MyString &insert(int loc, const char c);
@@ -25,6 +31,63 @@ public:
     MyString(char *str);
     MyString(const MyString &str);
 };
+int compare(const MyString &str) const
+{
+    for (int i = 0; i < std::min(string_length, str.string_length); i++)
+    {
+        if (string_content[i] > str.string_content[i])
+            return 1;
+        else if (string_content[i] < str.string_content[i])
+            return -1;
+    }
+    if (string_length == str.string_length)
+        return 0;
+    else if (string_length > str.string_length)
+        return 1;
+
+    return -1;
+}
+int MyString::find(int find_from, char c)
+{
+    MyString temp(c);
+    return find(find_from, temp);
+}
+int MyString::find(int find_from, char *str)
+{
+    MyString temp(str);
+    return find(find_from, temp);
+}
+
+int MyString::find(int find_from, MyString &str) const
+{
+    int i, j;
+    if (str.string_length == 0)
+        return -1;
+    for (i = find_from; i < string_length - str.string_length; i++)
+    {
+        for (j = 0; j < str.string_length; j++)
+            if (string_content[i + j] != str.string_content[j])
+                break;
+
+        if (j == str.string_length)
+            return i;
+    }
+    return -1;
+}
+MyString &MyString::erase(int loc, int num)
+{
+    if (num < 0 || loc < 0 || loc < string_length)
+    {
+        return *this;
+    }
+
+    for (int i = loc + num; i < string_length; i++)
+    {
+        string_content[i - num] = string_content[i];
+    }
+    string_length -= num;
+    return *this;
+}
 char MyString::at(int i) const
 {
     if (i >= string_length || i < 0)
@@ -78,7 +141,10 @@ MyString &MyString::insert(int loc, const MyString &str)
     delete[] string_content;
     for (int i = 0; i != loc; i++)
     {
+        string_content[i + str.string_length] = string_content[i];
     }
+    for (int i = 0; i < str.string_length; i++)
+        string_content[i + loc] = str.string_content[i];
 }
 void MyString::reserve(int size)
 {
@@ -184,8 +250,7 @@ MyString::~MyString()
 int main()
 {
     MyString str1("hellow world!");
-    MyString str2(str1);
+    str1.erase(1, 2);
 
     str1.println();
-    str2.println();
 }
