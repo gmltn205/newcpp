@@ -12,7 +12,7 @@ public:
     int capacity() const;
     void print() const;
     void println() const;
-
+    bool operator==(MyString &str);
     ~MyString();
     void reserve(int size);
     int capacity();
@@ -38,6 +38,10 @@ public:
     MyString &assign(const MyString &str);
     int reserve(int size);
 };
+bool operator==(MyString &str)
+{
+    return !compare(str);
+}
 int MyString::reserve(int size) int compare(const MyString &str) const
 {
     for (int i = 0; i < std::min(string_length, str.string_length); i++)
